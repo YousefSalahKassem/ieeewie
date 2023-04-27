@@ -9,6 +9,7 @@ import 'package:ieeewie/features/auth/data/remote/interfaces/i_auth_service.dart
 
 class AuthService implements IAuthService {
   final FirebaseAuth auth;
+
   AuthService(this.auth);
 
   @override
@@ -42,9 +43,9 @@ class AuthService implements IAuthService {
 
     try {
       await auth.signInWithCredential(credential);
-      final isRegisterBefore = await hasRegisterBefore();
-      if (!isRegisterBefore) {
-        sendUserData(
+      final isRegistered = await hasRegisterBefore();
+      if (!isRegistered) {
+        await sendUserData(
           UserModel(
             email: googleUser.email,
             password: "",
@@ -54,10 +55,9 @@ class AuthService implements IAuthService {
         );
       }
       UiAlerts.showSuccessNotification("Login Successfully");
-
       return true;
-    } on FirebaseAuthException catch (message) {
-      FirebaseExceptions.handleAuthException(message);
+    } on FirebaseAuthException catch (e) {
+      FirebaseExceptions.handleAuthException(e);
       return false;
     }
   }
@@ -126,9 +126,15 @@ class AuthService implements IAuthService {
 
   @override
   Future<bool> hasRegisterBefore() async {
-    return auth.currentUser!.providerData.any(
-      (provider) => provider.providerId == GoogleAuthProvider.PROVIDER_ID,
-    );
+    final uid = await getUserId();
+    final snapshot = await FirebaseFirestore.instance
+        .collection(AuthPaths.users)
+        .doc(uid)
+        .get();
+    return snapshot.exists &&
+        auth.currentUser!.providerData.any(
+          (provider) => provider.providerId == GoogleAuthProvider.PROVIDER_ID,
+        );
   }
 
   @override
@@ -167,8 +173,7 @@ class AuthService implements IAuthService {
         .get();
     final email =
         userData.data()?['email'].toString() ?? auth.currentUser?.email ?? "";
-    final phone = userData.data()?['phoneNumber'].toString() ??
-        "";
+    final phone = userData.data()?['phoneNumber'].toString() ?? "";
     final name = userData.data()?['name'].toString() ??
         auth.currentUser?.displayName ??
         "";
@@ -177,11 +182,11 @@ class AuthService implements IAuthService {
         "";
 
     final user = UserModel(
-        email: email,
-        password: "",
-        phoneNumber: phone,
-        name: name,
-        photoUrl: photo,
+      email: email,
+      password: "",
+      phoneNumber: phone,
+      name: name,
+      photoUrl: photo,
     );
     return user;
   }
@@ -194,7 +199,10 @@ class AuthService implements IAuthService {
       if (currentUser == null) {
         return false;
       }
-      await FirebaseFirestore.instance.collection(AuthPaths.users).doc(uid).update(user.toJson());
+      await FirebaseFirestore.instance
+          .collection(AuthPaths.users)
+          .doc(uid)
+          .update(user.toJson());
       await currentUser.updateDisplayName(user.name);
       await currentUser.updatePhotoURL(user.photoUrl);
       UiAlerts.showSuccessNotification("Profile Updated Successfully");

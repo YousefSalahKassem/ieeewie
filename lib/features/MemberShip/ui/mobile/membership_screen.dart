@@ -3,8 +3,8 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ieeewie/core/components/custom_app_bar.dart';
 import 'package:ieeewie/core/components/custom_loader.dart';
+import 'package:ieeewie/core/components/sliver_page.dart';
 import 'package:ieeewie/core/helpers/app_svg.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/core/helpers/logic_helpers.dart';
@@ -17,36 +17,33 @@ class MemberShipScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Membership"),
-      body: SafeArea(
-        child: StreamBuilder<List<Membership>>(
-          stream: ref.watch(MembershipNotifier.provider).getBenefits(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return SvgPicture.asset(AppSvg.error);
-            } else if (snapshot.hasData) {
-              final benefits = snapshot.data!;
-              benefits.sort((a, b) => a.id.compareTo(b.id));
-              return ListView.builder(
-                shrinkWrap: true,
-                itemCount: benefits.length,
-                itemBuilder: (context, index) {
-                  final item = benefits[index];
-                  return _MemberShipCard(membershipItem: item);
-                },
-              );
-            } else {
-              return Padding(
-                padding: EdgeInsets.only(top: context.heightR(0.25)),
-                child: const Center(
-                  child: CustomLoader(),
-                ),
-              );
-            }
-          },
-        ),
+    return SLiverPage(
+      body: StreamBuilder<List<Membership>>(
+        stream: ref.watch(MembershipNotifier.provider).getBenefits(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return SvgPicture.asset(AppSvg.error);
+          } else if (snapshot.hasData) {
+            final benefits = snapshot.data!;
+            benefits.sort((a, b) => a.id.compareTo(b.id));
+            return ListView.builder(
+              itemCount: benefits.length,
+              itemBuilder: (context, index) {
+                final item = benefits[index];
+                return _MemberShipCard(membershipItem: item);
+              },
+            );
+          } else {
+            return Padding(
+              padding: EdgeInsets.only(top: context.heightR(0.25)),
+              child: const Center(
+                child: CustomLoader(),
+              ),
+            );
+          }
+        },
       ),
+      title: "Membership",
     );
   }
 }

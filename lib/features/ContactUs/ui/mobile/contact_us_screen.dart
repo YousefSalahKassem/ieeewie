@@ -2,7 +2,7 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ieeewie/core/components/app_text_field.dart';
-import 'package:ieeewie/core/components/custom_app_bar.dart';
+import 'package:ieeewie/core/components/sliver_page.dart';
 import 'package:ieeewie/core/dialogs/network_alert_dialog.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/core/helpers/logic_helpers.dart';
@@ -21,16 +21,12 @@ class ContactUsScreen extends ConsumerWidget {
         context.navigateBack();
       }
     });
-    return const Scaffold(
-      appBar: CustomAppBar(title: "Contact Us"),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: _ContactUsForm(),
-          ),
-        ),
+    return const SLiverPage(
+      body: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 16),
+        child: _ContactUsForm(),
       ),
+      title: "Contact Us",
     );
   }
 }
@@ -121,33 +117,30 @@ class _ContactUsFormState extends ConsumerState<_ContactUsForm> {
             width: context.width,
             child: ElevatedButton(
               onPressed: () async {
-                final isConnected = await LogicHelpers.checkInternetConnectivity();
-                if(isConnected){
+                final isConnected =
+                    await LogicHelpers.checkInternetConnectivity();
+                if (isConnected) {
                   context.loaderOverlay.show();
                   ref
                       .read(ContactUsNotifier.provider.notifier)
                       .sendMessage(
-                    ContactUs(
-                      name: name.text,
-                      email: email.text,
-                      id: DateTime.now().toString(),
-                      subject: subject.text,
-                      message: message.text,
-                    ),
-                  )
+                        ContactUs(
+                          name: name.text,
+                          email: email.text,
+                          id: DateTime.now().toString(),
+                          subject: subject.text,
+                          message: message.text,
+                        ),
+                      )
                       .whenComplete(
                         () => context.loaderOverlay.hide(),
-                  );
-                }
-                else {
+                      );
+                } else {
                   NetworkAlertDialog.show(context);
                 }
               },
               child: const Text("Send"),
             ),
-          ),
-          const SizedBox(
-            height: 20,
           ),
         ],
       ),

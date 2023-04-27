@@ -8,4 +8,5 @@ mixin AppImages {
   static const String ieeeEgyptSection = 'assets/images/ieee_egypt.png';
   static const String ieeeLogo = 'assets/images/ieee-logo.png';
   static const String ieeeWie = 'assets/images/ieee.png';
+  static const String noisy = 'assets/images/noisy.jpg';
 }

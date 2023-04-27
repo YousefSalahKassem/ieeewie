@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ieeewie/core/components/custom_app_bar.dart';
+import 'package:ieeewie/core/components/sliver_page.dart';
 import 'package:ieeewie/core/themes/color.dart';
 import 'package:ieeewie/features/AboutUs/model/about_us.dart';
 import 'package:timeline_tile/timeline_tile.dart';
@@ -12,8 +12,7 @@ class VisionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final vision = AboutUs.vision.points!;
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Vision"),
+    return SLiverPage(
       body: SingleChildScrollView(
         child: FadeInUp(
           child: Container(
@@ -326,12 +325,12 @@ class VisionScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-
               ],
             ),
           ),
         ),
       ),
+      title: "Vision",
     );
   }
 }

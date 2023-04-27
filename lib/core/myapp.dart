@@ -24,7 +24,7 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  final _firebaseMessagingService = FirebaseMessagingService();
+  // final _firebaseMessagingService = FirebaseMessagingService();
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
@@ -32,7 +32,7 @@ class _MyAppState extends ConsumerState<MyApp> {
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(AppThemeProvider.provider.notifier).load();
-      await _firebaseMessagingService.setupFirebaseMessaging();
+      // await _firebaseMessagingService.setupFirebaseMessaging();
 
     });
     initConnectivity();

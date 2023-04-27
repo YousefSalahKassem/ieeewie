@@ -1,7 +1,7 @@
 import 'package:expandable/expandable.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ieeewie/core/components/custom_app_bar.dart';
+import 'package:ieeewie/core/components/sliver_page.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/features/AboutUs/model/about_us.dart';
 
@@ -10,37 +10,36 @@ class AboutUsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "About Us"),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Column(
-              children: [
-                _AboutUsCard(
-                  description: AboutUs.iEEEEgypt.description!,
-                  image: AboutUs.iEEEEgypt.image!,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _AboutUsCard(
-                  description: AboutUs.IEEEWIE.description!,
-                  image: AboutUs.IEEEWIE.image!,
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                _AboutUsCard(
-                  description: AboutUs.IEEE.description!,
-                  image: AboutUs.IEEE.image!,
-                ),
-              ],
-            ),
+    return SLiverPage(
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 10,),
+              _AboutUsCard(
+                description: AboutUs.iEEEEgypt.description!,
+                image: AboutUs.iEEEEgypt.image!,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _AboutUsCard(
+                description: AboutUs.IEEEWIE.description!,
+                image: AboutUs.IEEEWIE.image!,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              _AboutUsCard(
+                description: AboutUs.IEEE.description!,
+                image: AboutUs.IEEE.image!,
+              ),
+            ],
           ),
         ),
       ),
+      title: "About Us",
     );
   }
 }

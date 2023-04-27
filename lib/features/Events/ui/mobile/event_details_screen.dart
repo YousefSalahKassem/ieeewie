@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:animations/animations.dart';
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:auto_route/auto_route.dart';
@@ -6,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:ieeewie/core/dialogs/custom_alert_dialog.dart';
+import 'package:ieeewie/core/helpers/app_images.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/core/helpers/logic_helpers.dart';
 import 'package:ieeewie/core/routes/router.gr.dart';
@@ -69,8 +72,8 @@ class EventDetailsScreen extends StatelessWidget {
           if (event.linkExplore != null)
             Align(
               alignment: Alignment.bottomCenter,
-              child: Positioned(
-                bottom: 30,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 30),
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     padding: const EdgeInsets.symmetric(

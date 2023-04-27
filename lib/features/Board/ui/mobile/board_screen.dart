@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:ieeewie/core/components/custom_app_bar.dart';
 import 'package:ieeewie/core/components/custom_loader.dart';
 import 'package:ieeewie/core/components/custom_profile_image.dart';
+import 'package:ieeewie/core/components/sliver_page.dart';
 import 'package:ieeewie/core/helpers/app_svg.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/features/Board/blocs/board_notifier.dart';
@@ -16,8 +16,7 @@ class BoardScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: "Board"),
+    return SLiverPage(
       body: StreamBuilder<List<Board>>(
         stream: ref.watch(BoardNotifier.provider).getTeam(),
         builder: (context, snapshot) {
@@ -46,6 +45,7 @@ class BoardScreen extends ConsumerWidget {
           }
         },
       ),
+      title: "Board",
     );
   }
 }
@@ -125,7 +125,9 @@ class _MemberCard extends StatelessWidget {
                         expanded: description,
                       ),
                       if (member.description.length > 200)
-                        const SizedBox(height: 30,),
+                        const SizedBox(
+                          height: 30,
+                        ),
                       if (member.description.length > 200)
                         ElevatedButton(
                           onPressed: () {
