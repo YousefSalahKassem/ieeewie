@@ -4,6 +4,7 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:ieeewie/core/blocs/interfaces/i_gallery_service.dart';
+import 'package:ieeewie/core/helpers/ui_helpers.dart';
 
 class GalleryService implements IGalleryService {
   final FirebaseStorage _storage;
@@ -25,6 +26,7 @@ class GalleryService implements IGalleryService {
       for (final file in files.files) {
         if (file.bytes != null && file.size < 3145728) {
           imagesBytes.add(file.bytes!);
+          UiAlerts.showSuccessNotification("Image Added Successfully");
         } else {
           log("maximum size");
           // TODO: Handle maximum size error

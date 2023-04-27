@@ -24,7 +24,7 @@ class ContactUsScreen extends ConsumerWidget {
     return const SLiverPage(
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16),
-        child: _ContactUsForm(),
+        child: SingleChildScrollView(child: _ContactUsForm(),),
       ),
       title: "Contact Us",
     );
