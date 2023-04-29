@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ieeewie/core/blocs/state/global_state.dart';
 import 'package:ieeewie/features/Auth/model/user.dart';
@@ -15,11 +16,12 @@ class ProfileNotifier extends StateNotifier<GlobalStates<UserModel>> {
   );
 
   ProfileNotifier(this._authService) : super(GlobalStates.initial()) {
-    getCurrentUser();
+    if(FirebaseAuth.instance.currentUser!=null){
+      getCurrentUser();
+    }
   }
 
   Future<void> getCurrentUser() async {
-    print("hello");
     final user = await _authService.getCurrentUserData();
     state = GlobalStates.success(user);
   }

@@ -3,16 +3,18 @@ import 'dart:developer';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:ieeewie/core/blocs/providers/app_theme_provider.dart';
-import 'package:ieeewie/core/blocs/service/firebase_messaging_service.dart';
 import 'package:ieeewie/core/components/custom_loader.dart';
 import 'package:ieeewie/core/helpers/extensions.dart';
 import 'package:ieeewie/core/routes/router.gr.dart';
 import 'package:ieeewie/core/themes/app_theme.dart';
 import 'package:ieeewie/core/themes/color.dart';
+import 'package:ieeewie/main.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 import 'package:overlay_support/overlay_support.dart';
 
@@ -24,23 +26,48 @@ class MyApp extends ConsumerStatefulWidget {
 }
 
 class _MyAppState extends ConsumerState<MyApp> {
-  // final _firebaseMessagingService = FirebaseMessagingService();
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(AppThemeProvider.provider.notifier).load();
-      // await _firebaseMessagingService.setupFirebaseMessaging();
-
     });
     initConnectivity();
 
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage? message) {
+      RemoteNotification? notification = message?.notification;
+      AndroidNotification? android = message?.notification?.android;
+      if (notification != null && android != null) {
+        flutterLocalNotificationsPlugin.show(
+            notification.hashCode,
+            notification.title,
+            notification.body,
+            NotificationDetails(
+              android: AndroidNotificationDetails(
+                channel.id,
+                channel.name,
+                color: Colors.blue,
+                playSound: true,
+                icon: '@mipmap/ic_launcher',
+              ),
+            ));
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      log('A new onMessageOpenedApp event was published!');
+    });
+
     super.initState();
   }
+
+
 
   @override
   void dispose() {

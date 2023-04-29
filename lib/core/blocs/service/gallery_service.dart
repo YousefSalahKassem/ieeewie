@@ -29,11 +29,11 @@ class GalleryService implements IGalleryService {
           UiAlerts.showSuccessNotification("Image Added Successfully");
         } else {
           log("maximum size");
-          // TODO: Handle maximum size error
+          UiAlerts.showErrorNotification("Maximum size for image is 3MB");
         }
       }
     } else {
-      // TODO: Handle maximum number of files error
+      UiAlerts.showErrorNotification("Maximum images is 5");
     }
     return imagesBytes;
   }

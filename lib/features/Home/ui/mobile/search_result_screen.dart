@@ -16,29 +16,23 @@ class SearchResultScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return WillPopScope(
-      onWillPop: () async {
-        ref.read(GeneralNotifiers.searchController.notifier).state = '';
-        return true;
-      },
-      child: Scaffold(
-        appBar: const CustomAppBar(title: "Explore"),
-        resizeToAvoidBottomInset: false,
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: const [
-                SizedBox(
-                  height: 8,
-                ),
-                _SearchBar(),
-                SizedBox(
-                  height: 20,
-                ),
-                SearchResults()
-              ],
-            ),
+    return Scaffold(
+      appBar: const CustomAppBar(title: "Explore"),
+      resizeToAvoidBottomInset: false,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: const [
+              SizedBox(
+                height: 8,
+              ),
+              _SearchBar(),
+              SizedBox(
+                height: 20,
+              ),
+              SearchResults()
+            ],
           ),
         ),
       ),

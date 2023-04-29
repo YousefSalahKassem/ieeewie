@@ -12,6 +12,7 @@ class _SearchBar extends ConsumerWidget {
         ref.read(GeneralNotifiers.searchController.notifier).state =
             value ?? "";
       },
+      maxLines: 1,
       onSubmitted: (value){
         if(value !=null && value.trim().isNotEmpty){
           ref.read(RecentSearchNotifier.provider.notifier).addToRecent(value);
@@ -23,7 +24,7 @@ class _SearchBar extends ConsumerWidget {
         padding: const EdgeInsets.all(14),
         child: SvgPicture.asset(
           AppSvg.search,
-          color: AppColors.darkGreyColor,
+          color: Colors.grey,
         ),
       ),
       borderRadius: 10,
